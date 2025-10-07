@@ -1,0 +1,128 @@
+@model PP2Web.Models.BinaryInputModel
+@{
+    ViewData["Title"] = "Operaciones binarias";
+}
+<h1>Operaciones binarias - PP2</h1>
+
+<form asp-action="Index" method="post" novalidate>
+    <div>
+        <label for="A">a</label>
+        <input id="A" name="A" value="@Model.A" />
+        <span asp-validation-for="A" class="text-danger"></span>
+    </div>
+    <div>
+        <label for="B">b</label>
+        <input id="B" name="B" value="@Model.B" />
+        <span asp-validation-for="B" class="text-danger"></span>
+    </div>
+    <div>
+        <button type="submit">Calcular</button>
+    </div>
+    <div>
+        <span asp-validation-summary="All" class="text-danger"></span>
+    </div>
+    @Html.AntiForgeryToken()
+</form>
+
+@if (Model?.Results != null)
+{
+    <h2>Resultados</h2>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Ítem</th>
+                <th>Bin (8 bits para a y b)</th>
+                <th>Oct</th>
+                <th>Dec</th>
+                <th>Hex</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                // Helper: convertir y mostrar filas
+                string showBin8(string bin8) => bin8; // para a y b queremos 8 bits
+                (string bin, string oct, string dec, string hex) conv;
+
+                // fila a
+                conv = PP2Web.Models.BinaryResults.ToAllBases(Model.Results.BinA8);
+            }
+            <tr>
+                <td>a</td>
+                <td>@showBin8(Model.Results.BinA8)</td>
+                <td>@conv.oct</td>
+                <td>@conv.dec</td>
+                <td>@conv.hex</td>
+            </tr>
+            @{
+                conv = PP2Web.Models.BinaryResults.ToAllBases(Model.Results.BinB8);
+            }
+            <tr>
+                <td>b</td>
+                <td>@showBin8(Model.Results.BinB8)</td>
+                <td>@conv.oct</td>
+                <td>@conv.dec</td>
+                <td>@conv.hex</td>
+            </tr>
+
+            @{
+                // a AND b
+                conv = PP2Web.Models.BinaryResults.ToAllBases(Model.Results.And);
+            }
+            <tr>
+                <td>a AND b</td>
+                <td>@conv.bin</td>
+                <td>@conv.oct</td>
+                <td>@conv.dec</td>
+                <td>@conv.hex</td>
+            </tr>
+
+            @{
+                conv = PP2Web.Models.BinaryResults.ToAllBases(Model.Results.Or);
+            }
+            <tr>
+                <td>a OR b</td>
+                <td>@conv.bin</td>
+                <td>@conv.oct</td>
+                <td>@conv.dec</td>
+                <td>@conv.hex</td>
+            </tr>
+
+            @{
+                conv = PP2Web.Models.BinaryResults.ToAllBases(Model.Results.Xor);
+            }
+            <tr>
+                <td>a XOR b</td>
+                <td>@conv.bin</td>
+                <td>@conv.oct</td>
+                <td>@conv.dec</td>
+                <td>@conv.hex</td>
+            </tr>
+
+            @{
+                conv = PP2Web.Models.BinaryResults.ToAllBases(Model.Results.Sum);
+            }
+            <tr>
+                <td>a + b</td>
+                <td>@conv.bin</td>
+                <td>@conv.oct</td>
+                <td>@conv.dec</td>
+                <td>@conv.hex</td>
+            </tr>
+
+            @{
+                conv = PP2Web.Models.BinaryResults.ToAllBases(Model.Results.Mul);
+            }
+            <tr>
+                <td>a • b</td>
+                <td>@conv.bin</td>
+                <td>@conv.oct</td>
+                <td>@conv.dec</td>
+                <td>@conv.hex</td>
+            </tr>
+        </tbody>
+    </table>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
